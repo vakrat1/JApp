@@ -8,7 +8,11 @@ package com.mycompany.myapp;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.xmlview.DefaultXMLViewKit;
 import com.codename1.components.xmlview.XMLView;
+import com.codename1.io.ConnectionRequest;
+import com.codename1.io.JSONParser;
+import com.codename1.io.NetworkManager;
 import com.codename1.l10n.L10NManager;
+import com.codename1.ui.Command;
 import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
@@ -31,6 +35,8 @@ import com.codename1.xml.Element;
 import dto.ArticleDTO;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -42,7 +48,7 @@ import util.Util;
  *
  * @author yaniv
  */
-public class SectionNewsBox extends Form{
+public class NewsSectionForm extends Form{
     
     private Map<String, ArticleDTO> articlesMap = new HashMap<>();
 //    
@@ -54,15 +60,26 @@ public class SectionNewsBox extends Form{
     
     private String pageId;
     
-    public SectionNewsBox(List<ArticleDTO> articleDTOs, String pageId){
-        this.articleDTOs = articleDTOs;
+    private String dataUrl;
+    
+    public NewsSectionForm(String title, String pageId, String dataUrl,
+            Form previousForm){
+        this.setTitle(title);
         this.pageId = pageId;
+        this.dataUrl = dataUrl;
+        setBackCommand(new Command("Back") {
+            public void actionPerformed(ActionEvent ev) {
+                previousForm.showBack();
+            } 
+        });
+        setScrollableY(true);
     }
     
-    public Container createNewsBoxContainer(Form form) throws Exception{  
+    public void load() throws Exception{  
         
-        Container sectionBox = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        sectionBox.setScrollableY(true);
+        Container sectionBox = getContentPane();
+        
+        //TODO - ,ight need to move this referesh code from here
         sectionBox.addPullToRefresh(new Runnable() {
             @Override
             public void run() {
@@ -71,17 +88,17 @@ public class SectionNewsBox extends Form{
         
         for(ArticleDTO articleDTO : articleDTOs){
             articlesMap.put(articleDTO.getId(), articleDTO);
-            Container singleArticleBoxNews = createNewsBoxContainer(form, articleDTO);
+            Container singleArticleBoxNews = createNewsBoxContainer(articleDTO);
             sectionBox.add(singleArticleBoxNews);                
         }
- 
-        return sectionBox;
+        
+        this.revalidate();
+        this.show();
     }
     
-    private Container createNewsBoxContainer(Form form,
-            ArticleDTO articleDTO) throws Exception{
+    private Container createNewsBoxContainer(ArticleDTO articleDTO) throws Exception{
                 
-        ArticleAction articleAction = new ArticleAction(articleDTO.getId(), form);
+        ArticleAction articleAction = new ArticleAction(articleDTO.getId());
         
         final Container newsBox = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         newsBox.setUIID("newsBox");        
@@ -133,7 +150,7 @@ public class SectionNewsBox extends Form{
         private String id;
         private Form form;
         
-        public ArticleAction(String id, Form form){
+        public ArticleAction(String id){
             this.id = id;
             this.form = form;
         }
@@ -142,8 +159,7 @@ public class SectionNewsBox extends Form{
         public void actionPerformed(ActionEvent evt) {
             ArticleDTO articleDTO = articlesMap.get(id);
             try {
-                    SectionNewsBox sectionNewsBox = 
-                            new SectionNewsBox(articleDTOs, pageId);
+                    ArticleForm articleForm = new ArticleForm();
                     form.getContentPane().removeAll();
                     form.getContentPane().add(createArticleBox(articleDTO));
                     form.revalidate();
@@ -203,6 +219,40 @@ public class SectionNewsBox extends Form{
 
             return articleBox;
         }
+    }
+    
+    //load form data
+    private void loadArticles(String url){
+        
+        ConnectionRequest req = new ConnectionRequest(){                        
+
+            protected void readResponse(InputStream input) throws IOException {
+//                createAndSetArticleSection(input, form, pageId);
+                InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+                JSONParser parser = new JSONParser();
+                Map<String, Object> response = parser.parseJSON(reader);
+                List<Map<String, Object>> items = (List)response.get("items");
+                for (Map<String, Object> item : items){
+//                    String title = util.Util.parseHtmlSpecialTags((String)item.get("title"));
+//                    String content= util.Util.parseContentElement((String)item.get("content"));
+//                    content = util.Util.parseHtmlSpecialTags(content);
+                    String id = (String)item.get("id");
+                    String title = (String)item.get("title");
+                    String content= (String)item.get("content");                    
+                    String created= (String)item.get("created");
+                    String imgUrl = (String)((Map)item.get("images")).get("imageLarge");
+                    
+                    ArticleDTO articleDTO = new ArticleDTO(id, title, content, imgUrl);
+                    articleDTOs.add(articleDTO);
+                }
+            }
+        };
+
+        req.setPost(false);
+        req.setHttpMethod("GET");
+        req.setUrl(url);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");                       
+
+        NetworkManager.getInstance().addToQueue(req);
     }
     
     

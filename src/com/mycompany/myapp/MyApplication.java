@@ -48,22 +48,10 @@ public class MyApplication {
             return;
         }
         try{
-//            Form mainNewsForm = new Form(localeMap.get("Ashdod10"));
-            Form mainNewsForm = new Form();
-            util.Util.setFormLabel(mainNewsForm);
-            mainNewsForm.setScrollable(false);            
-            BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
-            mainNewsForm.setLayout(boxLayout);
-            
-            RestConsumer.loadAppMenu(mainNewsForm);
-            
-//            mainNewsForm.add(sectionNews);
-            
-    //        hi.addComponent(new Label("News"));
-            mainNewsForm.revalidate();
-            mainNewsForm.show();
+            MainNewsForm mainNewsForm = new MainNewsForm();
+            mainNewsForm.init();            
         }catch(Exception e){
-            
+            e.printStackTrace();
         }
     }
 
