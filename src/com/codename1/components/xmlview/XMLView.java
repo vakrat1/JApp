@@ -54,7 +54,9 @@ public class XMLView extends Container{
     
     public EncodedImage getDefaultSquarePlaceholderImage() {
         if (defaultSquarePlaceholderImage == null || defaultSquarePlaceholderImage.getWidth() != this.getWidth()) {
-            defaultSquarePlaceholderImage = EncodedImage.createFromImage(Image.createImage(this.getWidth(), this.getWidth()), false);
+            int w = (this.getWidth() <= 0) ? (int)(Display.getInstance().getDisplayWidth()/1.5) : this.getWidth();
+            int h = (this.getHeight()<= 0) ? Display.getInstance().getDisplayHeight()/4 : this.getWidth();
+            defaultSquarePlaceholderImage = EncodedImage.createFromImage(Image.createImage(w,w), false);
         }
         return defaultSquarePlaceholderImage;
     }

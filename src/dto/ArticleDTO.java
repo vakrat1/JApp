@@ -10,14 +10,24 @@ package dto;
  * @author CHAYON
  */
 public class ArticleDTO {
+    private String id;
     private String title;
     private String content;
     private String imgURL;
 
-    public ArticleDTO(String title, String content, String imgURL) {
+    public ArticleDTO(String id, String title, String content, String imgURL) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.imgURL = imgURL;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {

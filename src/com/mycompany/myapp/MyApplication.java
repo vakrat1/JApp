@@ -1,10 +1,13 @@
 package com.mycompany.myapp;
 
 
+import com.codename1.ui.Command;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
@@ -45,14 +48,14 @@ public class MyApplication {
             return;
         }
         try{
+//            Form mainNewsForm = new Form(localeMap.get("Ashdod10"));
             Form mainNewsForm = new Form();
+            util.Util.setFormLabel(mainNewsForm);
             mainNewsForm.setScrollable(false);            
             BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
             mainNewsForm.setLayout(boxLayout);
             
-            
-            
-            RestConsumer.testLoadJSONUsingJSONParser(mainNewsForm);
+            RestConsumer.loadAppMenu(mainNewsForm);
             
 //            mainNewsForm.add(sectionNews);
             
@@ -69,6 +72,16 @@ public class MyApplication {
     }
     
     public void destroy() {
+    }
+    
+    public ActionListener generalMenuCommandAction(){
+        return new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                
+            }
+        };
     }
 
 }
