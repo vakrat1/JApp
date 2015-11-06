@@ -20,10 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rest.RestConsumer;
-import static rest.RestConsumer.loadSectionArticles;
 
 /**
  *
@@ -31,55 +28,24 @@ import static rest.RestConsumer.loadSectionArticles;
  */
 public class MainNewsForm extends Form{
     
-    private MainNewsForm mainNewsForm;
-    
     private Map<String, NewsSectionForm> newsSectionFormsMap = new HashMap<>();
     
     List<MenuItemDTO> menuItemDTOs = new ArrayList<>();
     
     public void init() throws IOException{
-        mainNewsForm = new MainNewsForm();
-            util.Util.setFormLabel(mainNewsForm);
-            mainNewsForm.setBackCommand(new Command("Back") {
-                            public void actionPerformed(ActionEvent ev) {
-                                mainNewsForm.showBack();
-                            } 
-                        });
-            mainNewsForm.setScrollable(false);            
-            BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
-            mainNewsForm.setLayout(boxLayout);
-            
-            //use REST API to build dynamic menu
-            loadAppMenu();            
-    }
-    
-    public void buildCommands() throws Exception{
-        for (MenuItemDTO menuItemDTO : menuItemDTOs){
-            Command cmd = new Command(menuItemDTO.getTitle()){
-                public void actionPerformed(ActionEvent evt) { 
-                    
-                    String pageId = menuItemDTO.getMenuId();
-                    String dataUrl = "http://ashdod10.co.il/get/k2/items?cats="+
-                            menuItemDTO.getMenuId() +"&limit=10";
-                    
-                    NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
-                    if (newsSectionForm == null){
-                        newsSectionForm = new NewsSectionForm(menuItemDTO.getTitle(), 
-                                pageId, dataUrl, MainNewsForm.this);
-                        newsSectionFormsMap.put(pageId, newsSectionForm);
-                    }
-                    
-                    try {
-                        newsSectionForm.load();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            };
-            addCommand(cmd);
-        }
-        revalidate();
-        show();
+        
+        util.Util.setFormTitle(this);
+//        setBackCommand(new Command("Back") {
+//                        public void actionPerformed(ActionEvent ev) {
+//                            mainNewsForm.showBack();
+//                        } 
+//                    });
+        setScrollable(false);            
+        BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
+        setLayout(boxLayout);
+
+        //use REST API to build dynamic menu
+        loadAppMenu();            
     }
     
     private void loadAppMenu(){
@@ -102,7 +68,7 @@ public class MainNewsForm extends Form{
                     
                     MenuItemDTO menuItemDTO = new MenuItemDTO(menuId, title);
                     menuItemDTOs.add(menuItemDTO);
-                }                
+                }
                 try {
                     MainNewsForm.this.buildCommands();
                 } catch (Exception ex) {
@@ -117,6 +83,38 @@ public class MainNewsForm extends Form{
 
         NetworkManager.getInstance().addToQueue(req);
     }
+    
+    public void buildCommands() throws Exception{
+        for (MenuItemDTO menuItemDTO : menuItemDTOs){
+            Command cmd = new Command(menuItemDTO.getTitle()){
+                public void actionPerformed(ActionEvent evt) { 
+                    
+                    String pageId = menuItemDTO.getMenuId();
+                    String dataUrl = "http://ashdod10.co.il/get/k2/items?cats="+
+                            menuItemDTO.getMenuId() +"&limit=10";
+                    
+                    NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
+                    if (newsSectionForm == null){
+                        newsSectionForm = new NewsSectionForm(menuItemDTO.getTitle(), 
+                                pageId, dataUrl, MainNewsForm.this);
+                        try {
+                            newsSectionForm.init();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        newsSectionFormsMap.put(pageId, newsSectionForm);
+                    }
+                    newsSectionForm.revalidate();
+                    newsSectionForm.show();
+                }
+            };
+            addCommand(cmd);
+        }
+        revalidate();
+        show();
+    }
+    
+    
     
     private static String getMenuId(String link){
         int i = link.indexOf("&id=");

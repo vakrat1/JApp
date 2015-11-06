@@ -51,49 +51,44 @@ import util.Util;
 public class NewsSectionForm extends Form{
     
     private Map<String, ArticleDTO> articlesMap = new HashMap<>();
-//    
-//    public SectionNewsBox(Hashtable<String, String> localeMap){
-//        this.localeMap = localeMap;
-//    }
     
-    private List<ArticleDTO> articleDTOs;
+    private Map<String, ArticleForm> articleFormsMap = new HashMap<>();
+    
+    private List<ArticleDTO> articleDTOs = new ArrayList<>();
     
     private String pageId;
     
     private String dataUrl;
+    
+    private Form previousForm;
     
     public NewsSectionForm(String title, String pageId, String dataUrl,
             Form previousForm){
         this.setTitle(title);
         this.pageId = pageId;
         this.dataUrl = dataUrl;
+        this.previousForm = previousForm;
+    }
+    
+    public void init() throws Exception{  
+        
+        util.Util.setFormTitle(this);
+        
+        Container sectionBox = getContentPane();
+        
+        //TODO - might need to move this referesh code from here
+        sectionBox.addPullToRefresh(new Runnable() {
+            @Override
+            public void run() {
+            }
+        });        
         setBackCommand(new Command("Back") {
             public void actionPerformed(ActionEvent ev) {
                 previousForm.showBack();
             } 
         });
         setScrollableY(true);
-    }
-    
-    public void load() throws Exception{  
-        
-        Container sectionBox = getContentPane();
-        
-        //TODO - ,ight need to move this referesh code from here
-        sectionBox.addPullToRefresh(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
-        
-        for(ArticleDTO articleDTO : articleDTOs){
-            articlesMap.put(articleDTO.getId(), articleDTO);
-            Container singleArticleBoxNews = createNewsBoxContainer(articleDTO);
-            sectionBox.add(singleArticleBoxNews);                
-        }
-        
-        this.revalidate();
-        this.show();
+        loadArticles();        
     }
     
     private Container createNewsBoxContainer(ArticleDTO articleDTO) throws Exception{
@@ -117,11 +112,11 @@ public class NewsSectionForm extends Form{
         kit.install(contentViewer);
 //        content.load("http://dev.weblite.ca/demo-xmlview.xml", new Callback<Element>() {
         
+        //process only the first raw of the content of the Article
         String content = articleDTO.getContent();
         content = content.substring(0, content.indexOf("<p>"));
         content = util.Util.parseHtmlSpecialTags(content);
-        content = Util.addHeader() + "<p>" + content + "</p>" + Util.addFooter();
-        
+        content = Util.addHeader() + "<p>" + content + "</p>" + Util.addFooter();        
                 
         contentViewer.loadXmlAsString(content, new Callback<Element>() {
 
@@ -148,81 +143,33 @@ public class NewsSectionForm extends Form{
     class ArticleAction implements ActionListener{
         
         private String id;
-        private Form form;
         
         public ArticleAction(String id){
             this.id = id;
-            this.form = form;
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
             ArticleDTO articleDTO = articlesMap.get(id);
             try {
-                    ArticleForm articleForm = new ArticleForm();
-                    form.getContentPane().removeAll();
-                    form.getContentPane().add(createArticleBox(articleDTO));
-                    form.revalidate();
-                } catch (Exception ex) {
-                    System.out.println("ERROR: " + RestConsumer.class.getName());
-                    ex.printStackTrace();
-                    
+                ArticleForm articleForm = articleFormsMap.get(id);
+                if (articleForm == null){
+                    articleForm = new ArticleForm(NewsSectionForm.this);
+                    articleForm.init();
+                    articleForm.createArticleBox(articleDTO);
                 }
-                form.revalidate();
-        }
-        
-        private Container createArticleBox(/*Hashtable<String, String> localeMap, */
-            ArticleDTO articleDTO) throws Exception{
+                articleForm.revalidate();
+                articleForm.show();;
+            } catch (Exception ex) {
+                System.out.println("ERROR: " + RestConsumer.class.getName());
+                ex.printStackTrace();
 
-            final Container articleBox = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-            articleBox.setUIID("newsBox");
-            articleBox.setScrollableY(true);
-            articleBox.addPullToRefresh(new Runnable() {
-                @Override
-                public void run() {
-                }
-            });
-
-            TextArea titleTA = new TextArea();
-            titleTA.setUIID("titleLabel");
-            String title = util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
-            titleTA.setText(title);
-            titleTA.setEditable(false);      
-
-
-            DefaultXMLViewKit kit = new DefaultXMLViewKit();
-
-            XMLView contentViewer = new XMLView(UIManager.initFirstTheme("/theme"));
-            kit.install(contentViewer);
-    //        content.load("http://dev.weblite.ca/demo-xmlview.xml", new Callback<Element>() {
-
-            String content = articleDTO.getContent();
-            content = Util.parseContentElement(content);
-            content = util.Util.parseHtmlSpecialTags(content);
-
-
-            contentViewer.loadXmlAsString(content, new Callback<Element>() {
-
-                public void onSucess(Element value) {
-                    articleBox.revalidate();
-                }
-
-                public void onError(Object sender, Throwable err, int errorCode, String errorMessage) {                
-                }            
-            });
-
-            Container x = new Container(new BoxLayout(BoxLayout.X_AXIS));
-            articleBox.add(util.Util.getImageContainer(null, articleDTO, 1, 2));
-            articleBox.add(titleTA);
-            articleBox.add(contentViewer);
-            articleBox.revalidate();
-
-            return articleBox;
+            }
         }
     }
     
     //load form data
-    private void loadArticles(String url){
+    private void loadArticles(){
         
         ConnectionRequest req = new ConnectionRequest(){                        
 
@@ -245,12 +192,25 @@ public class NewsSectionForm extends Form{
                     ArticleDTO articleDTO = new ArticleDTO(id, title, content, imgUrl);
                     articleDTOs.add(articleDTO);
                 }
+                
+                for(ArticleDTO articleDTO : articleDTOs){
+                    articlesMap.put(articleDTO.getId(), articleDTO);
+                    Container singleArticleBoxNews;
+                    try {
+                        singleArticleBoxNews = createNewsBoxContainer(articleDTO);
+                        NewsSectionForm.this.add(singleArticleBoxNews);                
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                NewsSectionForm.this.revalidate();
+                NewsSectionForm.this.show();
             }
         };
 
         req.setPost(false);
         req.setHttpMethod("GET");
-        req.setUrl(url);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");                       
+        req.setUrl(dataUrl);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");                       
 
         NetworkManager.getInstance().addToQueue(req);
     }

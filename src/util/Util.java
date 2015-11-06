@@ -37,7 +37,7 @@ public class Util {
         return _content;
     }
     
-    public static void setFormLabel(Form form) throws IOException{
+    public static void setFormTitle(Form form) throws IOException{
         InputStream in = Display.getInstance().getResourceAsStream(Form.class, 
                 "/ashdod10_1.png");
         Image img = EncodedImage.create(in);
