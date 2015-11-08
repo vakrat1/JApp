@@ -45,6 +45,13 @@ public class Util {
         form.revalidate();
     }
     
+    public static Image getImage(String imageName) throws IOException{
+        InputStream in = Display.getInstance().getResourceAsStream(Form.class, 
+                "/"+imageName);
+        return EncodedImage.create(in);
+        
+    }
+    
     public static Container getImageContainer(ActionListener articalAction, 
             ArticleDTO articleDTO, int widthRatio, int heightRatio) throws IOException{
         

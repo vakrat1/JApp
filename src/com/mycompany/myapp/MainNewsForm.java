@@ -43,10 +43,13 @@ public class MainNewsForm extends Form{
         setScrollable(false);            
         BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
         setLayout(boxLayout);
+        
 
         //use REST API to build dynamic menu
         loadAppMenu();            
     }
+    
+    
     
     private void loadAppMenu(){
         

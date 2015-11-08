@@ -41,16 +41,16 @@ public class MyApplication {
         });*/
     }
     
-    public void start()  {
-        
-        if(current != null){
-            current.show();
-            return;
-        }
+    public void start()   {        
         try{
-            MainNewsForm mainNewsForm = new MainNewsForm();
-            mainNewsForm.init();            
-        }catch(Exception e){
+            if(current != null){
+                current.show();
+                return;
+            }
+            
+            SplashScreenForm.showSplashScreen();
+            
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

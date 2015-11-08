@@ -70,6 +70,8 @@ public class NewsSectionForm extends Form{
         this.previousForm = previousForm;
     }
     
+    
+    
     public void init() throws Exception{  
         
         util.Util.setFormTitle(this);
@@ -171,7 +173,7 @@ public class NewsSectionForm extends Form{
     //load form data
     private void loadArticles(){
         
-        ConnectionRequest req = new ConnectionRequest(){                        
+        ConnectionRequest req = new ConnectionRequest(){
 
             protected void readResponse(InputStream input) throws IOException {
 //                createAndSetArticleSection(input, form, pageId);
@@ -215,5 +217,11 @@ public class NewsSectionForm extends Form{
         NetworkManager.getInstance().addToQueue(req);
     }
     
+//    private class RefreshData(){
+//        public void run(){
+//            init();
+//        }
+//    }
+     
     
 }
