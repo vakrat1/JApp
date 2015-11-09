@@ -13,6 +13,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.util.Hashtable;
+import parser.AppStructureParser;
 import rest.RestConsumer;
 
 public class MyApplication {
@@ -47,6 +48,8 @@ public class MyApplication {
                 current.show();
                 return;
             }
+            
+            AppStructureParser.getInstance().processJson();            
             
             SplashScreenForm.showSplashScreen();
             

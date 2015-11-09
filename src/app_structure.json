@@ -1,0 +1,64 @@
+{
+  "application": {
+    "endpoint": "http://ashdod10.co.il/get",
+    "version": "1.0.0",
+    "splash": {
+      "iphone": "/splash-screen_1080X1920.png",
+      "ipad": "/bg_2048X1563.jpg"
+    },
+    "menutype": "bottom/swipe/top"
+  },
+  "menus": {
+    "2000": {
+      "id": "2000",
+      "name": "mainmenu",
+      "menuitems": {
+        "2000.1": {
+          "id": "2000.1",
+          "name": "חדשות",
+          "component": {
+            "type": "com_k2",
+            "k2_category": "8",
+            "featured": "yes/no/include",
+            "limit": "10",
+            "page": "1"
+          }
+        }
+      }
+    }
+  },
+  "modules": {
+    "1000": {
+      "id": "1000",
+      "type": "mod_ijoomla_adagency_remote",
+      "position": "above/below/left/right/custom",
+      "name": "מודעה 600X10 מעל הכתבה",
+      "disply": "none/all/custom/customexpect",
+      "custom display menus": [
+        "2000.1",
+        "2000.2",
+        "2000.5"
+      ],
+      "custom params": {
+        "website url": "http://ads.ashdod10.co.il/",
+        "zone ID": "105"
+      }
+    },
+    "1001": {
+      "type": "mod_k2_content",
+      "position": "above/below/left/right/custom",
+      "name": "עמוד הבית - חדשות",
+      "disply": "none/all/custom/customexpect",
+      "custom display menus": [
+        "2000.1"
+      ],
+      "custom params": {
+        "k2_category": "8",
+        "featured": "yes/no/include",
+        "limit": "3",
+        "page": "1"
+      }
+    }
+  }
+}
+

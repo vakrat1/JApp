@@ -5,40 +5,39 @@
  */
 package dto;
 
+import java.util.Map;
+
 /**
  *
  * @author CHAYON
  */
 public class MenuItemDTO {
     
-    private String menuId;
+    private String menuItemId;
     
-    private String title;
+    private String menuItemName;
+    
+    private String componentType;
+    
+    private String componentK2Category;
+    
+    private String featured;
+    
+    private String limit;
+    
+    private String page;
 
     
     public MenuItemDTO(){}
     
-    public MenuItemDTO(String menuId, String title) {
-        this.menuId = menuId;
-        this.title = title;
+    public MenuItemDTO(Map<String, Object> menuItem) {
+        this.menuItemId = (String)menuItem.get("id");
+        this.menuItemName = (String)menuItem.get("name");
+        Map<String, Object> component = (Map<String, Object>)menuItem.get("component");
+        String componentType = (String) component.get("type");
+        String componentK2Category = (String) component.get("k2_category");
+        String featured = (String) component.get("featured");
+        String limit = (String) component.get("limit");
+        String page = (String) component.get("page");
     }
-
-    public String getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(String menuId) {
-        this.menuId = menuId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    
-    
 }

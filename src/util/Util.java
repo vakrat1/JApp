@@ -47,7 +47,7 @@ public class Util {
     
     public static Image getImage(String imageName) throws IOException{
         InputStream in = Display.getInstance().getResourceAsStream(Form.class, 
-                "/"+imageName);
+                imageName);
         return EncodedImage.create(in);
         
     }

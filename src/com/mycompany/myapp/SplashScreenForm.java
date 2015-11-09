@@ -50,7 +50,7 @@ public class SplashScreenForm {
 //        splash.addComponent(BorderLayout.NORTH, title);
 //        splash.addComponent(BorderLayout.SOUTH, subtitle);
 
-        Label splashLabel = new Label(util.Util.getImage("splash-screen_1920X1080.jpg"));
+        Label splashLabel = new Label(util.Util.getImage("/splash-screen_1080X1920.png"));
         splashLabel.setUIID("splashLabel");
 
         // a layered layout places components one on top of the other in the same dimension, it is
