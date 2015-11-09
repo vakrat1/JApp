@@ -24,8 +24,14 @@ public class MenuDTO {
     public MenuDTO(Map<String, Object> menu){
         this.menuId = (String)menu.get("id");
         this.menuName = (String)menu.get("name");
-        Map<String, Object> menuItems = (Map<String, Object>)menu.get("menuitems");        
-        MenuItemDTO menuItemDTO = new MenuItemDTO(menuItems);
+        Map<String, Object> menuItems = (Map<String, Object>)menu.get("menuitems");
+        for (Map.Entry<String, Object> entrySet : menuItems.entrySet()) {
+            String key = entrySet.getKey();
+            Map<String, Object> menuItem = (Map<String, Object>)entrySet.getValue();
+            MenuItemDTO menuItemDTO = new MenuItemDTO(menuItem);
+            menuDTOList.add(menuDTO);
+        }
+        
     }
     
 }
