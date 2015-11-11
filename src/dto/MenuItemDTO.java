@@ -19,7 +19,7 @@ public class MenuItemDTO {
     
     private String componentType;
     
-    private String componentK2Category;
+    private String componentCategory;
     
     private String featured;
     
@@ -31,13 +31,72 @@ public class MenuItemDTO {
     public MenuItemDTO(){}
     
     public MenuItemDTO(Map<String, Object> menuItem) {
+                                
         this.menuItemId = (String)menuItem.get("id");
         this.menuItemName = (String)menuItem.get("name");
         Map<String, Object> component = (Map<String, Object>)menuItem.get("component");
-        String componentType = (String) component.get("type");
-        String componentK2Category = (String) component.get("k2_category");
-        String featured = (String) component.get("featured");
-        String limit = (String) component.get("limit");
-        String page = (String) component.get("page");
+        this.componentType = (String) component.get("type");
+        this.componentCategory = (String) component.get("category");
+        this.featured = (String) component.get("featured");
+        this.limit = (String) component.get("limit");
+        this.page = (String) component.get("page");
     }
+
+    public String getMenuItemId() {
+        return menuItemId;
+    }
+
+    public void setMenuItemId(String menuItemId) {
+        this.menuItemId = menuItemId;
+    }
+
+    public String getMenuItemName() {
+        return menuItemName;
+    }
+
+    public void setMenuItemName(String menuItemName) {
+        this.menuItemName = menuItemName;
+    }
+
+    public String getComponentType() {
+        return componentType;
+    }
+
+    public void setComponentType(String componentType) {
+        this.componentType = componentType;
+    }
+
+    public String getComponentCategory() {
+        return componentCategory;
+    }
+
+    public void setComponentCategory(String componentCategory) {
+        this.componentCategory = componentCategory;
+    }
+
+    public String getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(String featured) {
+        this.featured = featured;
+    }
+
+    public String getLimit() {
+        return limit;
+    }
+
+    public void setLimit(String limit) {
+        this.limit = limit;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+    
+    
 }

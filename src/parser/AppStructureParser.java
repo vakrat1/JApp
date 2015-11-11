@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,13 +62,19 @@ public class AppStructureParser {
         menuType = (String)application.get("menutype");
         
         //load menus
-        Map<String, Object> menus = (Map<String, Object>)response.get("menus");
-        for (Map.Entry<String, Object> entrySet : menus.entrySet()) {
-            String key = entrySet.getKey();
-            Map<String, Object> menu = (Map<String, Object>)entrySet.getValue();
+        List<Map<String,Object>> menus = (List<Map<String,Object>>)response.get("menus");
+   
+        for (Map<String,Object> menu : menus) {
             MenuDTO menuDTO = new MenuDTO(menu);
             menuDTOList.add(menuDTO);
         }
+//                    
+//        for (Map.Entry<String, Object> entrySet : menus.entrySet()) {
+//            String key = entrySet.getKey();
+//            Map<String, Object> menu = (Map<String, Object>)entrySet.getValue();
+//            MenuDTO menuDTO = new MenuDTO(menu);
+//            menuDTOList.add(menuDTO);
+//        }
     }
     
     
@@ -103,6 +110,14 @@ public class AppStructureParser {
 
     public String getMenuType() {
         return menuType;
+    }
+
+    public List<MenuDTO> getMenuDTOList() {
+        return menuDTOList;
+    }
+
+    public void setMenuDTOList(List<MenuDTO> menuDTOList) {
+        this.menuDTOList = menuDTOList;
     }
     
     

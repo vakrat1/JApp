@@ -49,7 +49,7 @@ public class MyApplication {
                 return;
             }
             
-            AppStructureParser.getInstance().processJson();            
+            AppStructureParser.getInstance();
             
             SplashScreenForm.showSplashScreen();
             

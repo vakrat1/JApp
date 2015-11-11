@@ -8,25 +8,74 @@
     },
     "menutype": "bottom/swipe/top"
   },
-  "menus": {
-    "2000": {
-      "id": "2000",
-      "name": "mainmenu",
-      "menuitems": {
-        "2000.1": {
-          "id": "2000.1",
-          "name": "חדשות",
-          "component": {
-            "type": "com_k2",
-            "k2_category": "8",
-            "featured": "yes/no/include",
-            "limit": "10",
-            "page": "1"
-          }
-        }
+  "menus": [
+      {
+          "id": "1",
+          "menutype": "mainmenu",
+          "title": "Main Menu",
+          "menuitems": [
+                {
+                    "id": "101",                    
+                    "name":"????",   
+                    "component": {
+                      "type": "k2",
+                      "category": "8",
+                      "featured": "yes/no/include",
+                      "limit": "10",
+                      "page": "1"
+                    }
+                },
+                {
+                    "id": "114",
+                    "menutype":"mainmenu",
+                    "name":"?????",   
+                    "component": {
+                      "type": "k2",
+                      "category": "2",
+                      "featured": "yes/no/include",
+                      "limit": "10",
+                      "page": "1"
+                    }
+                },
+                {
+                    "id": "115",
+                    "menutype":"mainmenu",
+                    "name":"?????",   
+                    "component": {
+                      "type": "k2",
+                      "category": "3",
+                      "featured": "yes/no/include",
+                      "limit": "10",
+                      "page": "1"
+                    }
+                },
+                {
+                    "id": "116",
+                    "menutype":"mainmenu",
+                    "name":"?????",   
+                    "component": {
+                      "type": "k2",
+                      "category": "5",
+                      "featured": "yes/no/include",
+                      "limit": "10",
+                      "page": "1"
+                    }
+                },
+                {
+                    "id": "118",
+                    "menutype":"mainmenu",
+                    "name":"?????",   
+                    "component": {
+                      "type": "k2",
+                      "category": "17",
+                      "featured": "yes/no/include",
+                      "limit": "10",
+                      "page": "1"
+                    }
+                }
+          ]
       }
-    }
-  },
+    ],  
   "modules": {
     "1000": {
       "id": "1000",
