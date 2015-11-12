@@ -16,7 +16,7 @@
           "menuitems": [
                 {
                     "id": "101",                    
-                    "name":"????",   
+                    "name":"ראשי",   
                     "component": {
                       "type": "k2",
                       "category": "8",
@@ -28,7 +28,7 @@
                 {
                     "id": "114",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"חדשות",   
                     "component": {
                       "type": "k2",
                       "category": "2",
@@ -40,7 +40,7 @@
                 {
                     "id": "115",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"ספורט",   
                     "component": {
                       "type": "k2",
                       "category": "3",
@@ -52,7 +52,7 @@
                 {
                     "id": "116",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"תרבות",   
                     "component": {
                       "type": "k2",
                       "category": "5",
@@ -64,7 +64,7 @@
                 {
                     "id": "118",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"חינוך",   
                     "component": {
                       "type": "k2",
                       "category": "17",

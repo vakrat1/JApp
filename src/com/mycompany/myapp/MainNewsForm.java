@@ -5,12 +5,15 @@
  */
 package com.mycompany.myapp;
 
+import com.codename1.components.WebBrowser;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
+import com.codename1.ui.BrowserComponent;
 import com.codename1.ui.Command;
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import dto.MenuDTO;
 import dto.MenuItemDTO;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.web.WebView;
 import parser.AppStructureParser;
 import rest.RestConsumer;
 
@@ -32,7 +36,11 @@ public class MainNewsForm extends Form{
     
     private Map<String, NewsSectionForm> newsSectionFormsMap = new HashMap<>();
     
-//    List<MenuDTO> menuDTOs = new ArrayList<>();
+    List<MenuDTO> menuDTOs = new ArrayList<>();
+    
+    public MainNewsForm() throws IOException{
+        menuDTOs = AppStructureParser.getInstance().getMenuDTOList();
+    }
     
     public void init() throws IOException{
         
@@ -42,10 +50,17 @@ public class MainNewsForm extends Form{
 //                            mainNewsForm.showBack();
 //                        } 
 //                    });
-        setScrollable(false);            
-        BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
-        setLayout(boxLayout);
+        setScrollable(false);                    
+        setLayout(new BorderLayout());
         
+        WebBrowser webBrowser = new WebBrowser();
+        webBrowser.setURL("http://ads.ashdod10.co.il/components/com_adagency/ijoomla_ad_agency_zone.php?zid=105");
+        add(BorderLayout.SOUTH, webBrowser);
+        
+        buildCommands();
+        
+        revalidate();
+        show();
 
         //use REST API to build dynamic menu
 //        loadAppMenu();            
@@ -89,17 +104,21 @@ public class MainNewsForm extends Form{
 //        NetworkManager.getInstance().addToQueue(req);
 //    }
     
-    public void buildCommands() throws Exception{
-        MenuDTO menuDTO = AppStructureParser.getInstance().getMenuDTOList().get(0);
+    public void buildCommands() {
+        if (menuDTOs.size() == 0){
+            throw new RuntimeException("Failed to retrieve application menu");
+        }
+        
+        MenuDTO menuDTO = menuDTOs.get(0);
         for (final MenuItemDTO menuItemDTO : menuDTO.getMenuItemDTOList()){
             
-            Command cmd = new Command(menuDTO.getMenuName()){
+            Command cmd = new Command(menuItemDTO.getMenuItemName()){
                 public void actionPerformed(ActionEvent evt) { 
                     
-                    String pageId = menuDTO.getMenuId();
+                    String pageId = menuItemDTO.getMenuItemId();
                     String dataUrl = "http://ashdod10.co.il/get/" + 
                             menuItemDTO.getComponentType() + "/items?cats=" +
-                            menuItemDTO.getMenuItemId() + "&limit=10";
+                            menuItemDTO.getComponentId() + "&limit=10";
                     
                     NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
                     if (newsSectionForm == null){
@@ -120,7 +139,6 @@ public class MainNewsForm extends Form{
             addCommand(cmd);
         }
         revalidate();
-        show();
     }
     
     

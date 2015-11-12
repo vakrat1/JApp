@@ -19,7 +19,7 @@ public class MenuItemDTO {
     
     private String componentType;
     
-    private String componentCategory;
+    private String componentId;
     
     private String featured;
     
@@ -36,7 +36,7 @@ public class MenuItemDTO {
         this.menuItemName = (String)menuItem.get("name");
         Map<String, Object> component = (Map<String, Object>)menuItem.get("component");
         this.componentType = (String) component.get("type");
-        this.componentCategory = (String) component.get("category");
+        this.componentId = (String) component.get("category");
         this.featured = (String) component.get("featured");
         this.limit = (String) component.get("limit");
         this.page = (String) component.get("page");
@@ -66,12 +66,12 @@ public class MenuItemDTO {
         this.componentType = componentType;
     }
 
-    public String getComponentCategory() {
-        return componentCategory;
+    public String getComponentId() {
+        return componentId;
     }
 
-    public void setComponentCategory(String componentCategory) {
-        this.componentCategory = componentCategory;
+    public void setComponentId(String componentId) {
+        this.componentId = componentId;
     }
 
     public String getFeatured() {
