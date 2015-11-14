@@ -77,13 +77,13 @@
       }
     ],  
   "modules": {
-    "1000": {
+    "ads": {
       "id": "1000",
       "type": "mod_ijoomla_adagency_remote",
       "position": "above/below/left/right/custom",
       "name": "מודעה 600X10 מעל הכתבה",
       "disply": "none/all/custom/customexpect",
-      "custom display menus": [
+      "custom_display_menus": [
         "2000.1",
         "2000.2",
         "2000.5"
@@ -93,20 +93,40 @@
         "zone ID": "105"
       }
     },
-    "1001": {
-      "type": "mod_k2_content",
+    "mainpage": {
+      "type": "k2",
       "position": "above/below/left/right/custom",
-      "name": "עמוד הבית - חדשות",
-      "disply": "none/all/custom/customexpect",
-      "custom display menus": [
+      "name": "עמוד הבית- חדשות",
+      "display": "none/all/custom/customexpect",
+      "custom_display_menus": [
         "2000.1"
       ],
-      "custom params": {
-        "k2_category": "8",
-        "featured": "yes/no/include",
-        "limit": "3",
-        "page": "1"
-      }
+      "custom_params": [
+          {
+            "category": "114",
+            "featured": "yes/no/include",
+            "limit": "3",
+            "page": "1"
+          },
+          {
+            "category": "115",
+            "featured": "yes/no/include",
+            "limit": "3",
+            "page": "1"
+          },
+          {
+            "category": "116",
+            "featured": "yes/no/include",
+            "limit": "3",
+            "page": "1"
+          },
+          {
+            "category": "118",
+            "featured": "yes/no/include",
+            "limit": "3",
+            "page": "1"
+          }
+      ]
     }
   }
 }

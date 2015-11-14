@@ -11,10 +11,13 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.BrowserComponent;
 import com.codename1.ui.Command;
+import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import dto.ArticleDTO;
+import dto.MainPageModuleDTO;
 import dto.MenuDTO;
 import dto.MenuItemDTO;
 import java.io.IOException;
@@ -27,14 +30,18 @@ import java.util.Map;
 import javafx.scene.web.WebView;
 import parser.AppStructureParser;
 import rest.RestConsumer;
+import util.DataBuilder;
+import util.Util;
 
 /**
  *
  * @author CHAYON
  */
-public class MainNewsForm extends Form{
+public class MainNewsForm extends Form implements DataDependedForm{
     
     private Map<String, NewsSectionForm> newsSectionFormsMap = new HashMap<>();
+    
+    List<ArticleDTO> articleDTOs = new ArrayList<>();
     
     List<MenuDTO> menuDTOs = new ArrayList<>();
     
@@ -59,11 +66,84 @@ public class MainNewsForm extends Form{
         
         buildCommands();
         
+        buildMainNewsForm();
+        
         revalidate();
         show();
 
         //use REST API to build dynamic menu
 //        loadAppMenu();            
+    }
+    
+    //this is a callback method that is being invoked after data is being 
+    //downloaded from the server
+    public synchronized void postDataDownload(Object data){
+        articleDTOs.addAll((List<ArticleDTO>)data);
+        
+        List<ArticleDTO> _data = (List<ArticleDTO>)data;
+        
+        MainNewsForm.this.getContentPane().add(Util.getComponentSeparator());
+        
+        for(ArticleDTO articleDTO : _data){
+//            articlesMap.put(articleDTO.getId(), articleDTO);
+            Container singleArticleBoxNews;
+            try {
+                singleArticleBoxNews = DataBuilder.createNewsBoxContainer(articleDTO, null);//TODO
+                MainNewsForm.this.getContentPane().add(singleArticleBoxNews);                
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        MainNewsForm.this.revalidate();
+        MainNewsForm.this.show();
+    }
+    
+    public void buildMainNewsForm() throws IOException{
+        Container mainContainer = getContentPane();
+        BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
+        mainContainer.setLayout(boxLayout);
+        
+        mainContainer.setScrollableY(true);
+        
+        MainPageModuleDTO mainPageModuleDTO = 
+                AppStructureParser.getInstance().getMainPageModuleDTO();
+        
+        List<MainPageModuleDTO.CustomModuleParams> customModuleParamsList = 
+                mainPageModuleDTO.getCustomModuleParamList();
+        
+        for (MainPageModuleDTO.CustomModuleParams customModuleParams : customModuleParamsList){
+            
+            String pageId = customModuleParams.getCategory();
+            NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
+                                    
+            if (newsSectionForm == null){
+                System.out.println("Failed to find NewsSection with pageId: " + pageId);
+                continue;
+            }
+            
+            String dataUrl = "http://ashdod10.co.il/get/" + 
+                    newsSectionForm.getComponentType() + "/items?cats=" +
+                    newsSectionForm.getCategoryId() + 
+                    "&limit=" + customModuleParams.getLimit();
+            
+            DataBuilder.downloadArticles(dataUrl, this);
+            
+//            NewsSectionForm newsSectionFormHeadlines = new NewsSectionForm(
+//                    newsSectionForm.getTitle(), 
+//                    pageId, 
+//                    ,
+//                    ,
+//                    ,
+//                    customModuleParams.getPage(),
+//                    null);
+//            try {
+//                newsSectionFormHeadlines.init();
+//                mainContainer.add(Util.getComponentSeparator());
+//                mainContainer.add(newsSectionFormHeadlines);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+        }
     }
     
     
@@ -111,26 +191,31 @@ public class MainNewsForm extends Form{
         
         MenuDTO menuDTO = menuDTOs.get(0);
         for (final MenuItemDTO menuItemDTO : menuDTO.getMenuItemDTOList()){
+            String pageId = menuItemDTO.getMenuItemId();
+            NewsSectionForm newsSectionForm = new NewsSectionForm(
+                    menuItemDTO.getMenuItemName(),
+                    menuItemDTO.getMenuItemId(), 
+                    menuItemDTO.getComponentType(),
+                    menuItemDTO.getComponentId(),
+                    menuItemDTO.getLimit(), "1",
+                    MainNewsForm.this);
+            newsSectionFormsMap.put(pageId, newsSectionForm);
+            try {
+                newsSectionForm.init();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             
             Command cmd = new Command(menuItemDTO.getMenuItemName()){
-                public void actionPerformed(ActionEvent evt) { 
-                    
-                    String pageId = menuItemDTO.getMenuItemId();
-                    String dataUrl = "http://ashdod10.co.il/get/" + 
-                            menuItemDTO.getComponentType() + "/items?cats=" +
-                            menuItemDTO.getComponentId() + "&limit=10";
-                    
+                public void actionPerformed(ActionEvent evt) {                    
+//                    String dataUrl = "http://ashdod10.co.il/get/" + 
+//                            menuItemDTO.getComponentType() + "/items?cats=" +
+//                            menuItemDTO.getComponentId() + "&limit="+menuItemDTO.getLimit();                    
                     NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
                     if (newsSectionForm == null){
-                        newsSectionForm = new NewsSectionForm(menuItemDTO.getMenuItemName(), 
-                                menuItemDTO.getMenuItemId(), 
-                                dataUrl, MainNewsForm.this);
-                        try {
-                            newsSectionForm.init();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                        newsSectionFormsMap.put(pageId, newsSectionForm);
+                        System.out.println("Failed to retrieve DataForm for "
+                                + "command with PageID: " + pageId);
+                        return;
                     }
                     newsSectionForm.revalidate();
                     newsSectionForm.show();

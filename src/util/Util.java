@@ -6,6 +6,7 @@
 package util;
 
 import com.codename1.io.services.ImageDownloadService;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
@@ -24,6 +25,12 @@ import java.io.InputStream;
  * @author CHAYON
  */
 public class Util {
+    
+    public static Component getComponentSeparator(){
+        Label sep = new Label("");
+        sep.setUIID("sectionSeperationTitle");
+        return sep;        
+    }
     
     public static String parseHtmlSpecialTags(String content){
         String _content = content;

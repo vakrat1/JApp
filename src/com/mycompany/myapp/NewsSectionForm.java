@@ -42,13 +42,14 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import rest.RestConsumer;
+import util.DataBuilder;
 import util.Util;
 
 /**
  *
  * @author yaniv
  */
-public class NewsSectionForm extends Form{
+public class NewsSectionForm extends Form implements DataDependedForm{
     
     private Map<String, ArticleDTO> articlesMap = new HashMap<>();
     
@@ -60,19 +61,34 @@ public class NewsSectionForm extends Form{
     
     private String dataUrl;
     
+    private String componentType;
+            
+    private String categoryId;
+    
+    private String limit;
+    
+    private String page;
+    
     private Form previousForm;
     
-    public NewsSectionForm(String title, String pageId, String dataUrl,
-            Form previousForm){
+    public NewsSectionForm(String title, String pageId, String componentType, 
+            String categoryId, String limit, String page, Form previousForm){
         this.setTitle(title);
         this.pageId = pageId;
-        this.dataUrl = dataUrl;
+        this.componentType = componentType;
+        this.categoryId = categoryId;
+        this.limit = limit;
+        this.page = page;
         this.previousForm = previousForm;
     }
     
     
     
     public void init() throws Exception{  
+        
+        this.dataUrl = "http://ashdod10.co.il/get/" + 
+                            componentType + "/items?cats=" +
+                             categoryId + "&limit="+ limit;
         
         util.Util.setFormTitle(this);
         
@@ -84,61 +100,38 @@ public class NewsSectionForm extends Form{
             public void run() {
             }
         });        
-        setBackCommand(new Command("Back") {
-            public void actionPerformed(ActionEvent ev) {
-                previousForm.showBack();
-            } 
-        });
-        setScrollableY(true);
-        loadArticles();        
+        if(previousForm != null){
+            setBackCommand(new Command("Back") {
+                public void actionPerformed(ActionEvent ev) {
+                    previousForm.showBack();
+                } 
+            });
+            setScrollableY(true);
+        }        
+        DataBuilder.downloadArticles(dataUrl, this);
     }
     
-    private Container createNewsBoxContainer(ArticleDTO articleDTO) throws Exception{
-                
-        ArticleAction articleAction = new ArticleAction(articleDTO.getId());
+    //this is a callback method that is being invoked after data is being 
+    //downloaded from the server
+    public void postDataDownload(Object data){
+        articleDTOs = (List<ArticleDTO>)data;
         
-        final Container newsBox = new Container(new BoxLayout(BoxLayout.Y_AXIS));
-        newsBox.setUIID("newsBox");        
-        
-        TextArea titleTA = new TextArea();
-        titleTA.setUIID("titleLabel");
-        String title = util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
-        titleTA.setText(title);
-        titleTA.setEditable(false);
-        titleTA.addPointerReleasedListener(articleAction);        
-        
-        
-        DefaultXMLViewKit kit = new DefaultXMLViewKit();
-        
-        XMLView contentViewer = new XMLView(UIManager.initFirstTheme("/theme"));
-        kit.install(contentViewer);
-//        content.load("http://dev.weblite.ca/demo-xmlview.xml", new Callback<Element>() {
-        
-        //process only the first raw of the content of the Article
-        String content = articleDTO.getContent();
-        content = content.substring(0, content.indexOf("<p>"));
-        content = util.Util.parseHtmlSpecialTags(content);
-        content = Util.addHeader() + "<p>" + content + "</p>" + Util.addFooter();        
-                
-        contentViewer.loadXmlAsString(content, new Callback<Element>() {
-
-            public void onSucess(Element value) {
-                newsBox.revalidate();
+        for(ArticleDTO articleDTO : articleDTOs){
+            articlesMap.put(articleDTO.getId(), articleDTO);
+            Container singleArticleBoxNews;
+            NewsSectionForm.ArticleAction articleAction = new NewsSectionForm.ArticleAction(articleDTO.getId());
+            try {
+                singleArticleBoxNews = DataBuilder.createNewsBoxContainer(articleDTO, articleAction);
+                NewsSectionForm.this.add(singleArticleBoxNews);                
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
-            public void onError(Object sender, Throwable err, int errorCode, String errorMessage) {                
-            }            
-        });
-                
-        Container x = new Container(new BoxLayout(BoxLayout.X_AXIS));
-        x.add(util.Util.getImageContainer(articleAction, articleDTO, 2, 4));
-        x.add(titleTA);
-        newsBox.add(x);
-        newsBox.add(contentViewer);
-        newsBox.revalidate();
-        
-        return newsBox;
+        }
+        NewsSectionForm.this.revalidate();
+        NewsSectionForm.this.show();
     }
+    
+    
     
     
     
@@ -170,58 +163,87 @@ public class NewsSectionForm extends Form{
         }
     }
     
-    //load form data
-    private void loadArticles(){
-        
-        ConnectionRequest req = new ConnectionRequest(){
-
-            protected void readResponse(InputStream input) throws IOException {
-//                createAndSetArticleSection(input, form, pageId);
-                InputStreamReader reader = new InputStreamReader(input, "UTF-8");
-                JSONParser parser = new JSONParser();
-                Map<String, Object> response = parser.parseJSON(reader);
-                List<Map<String, Object>> items = (List)response.get("items");
-                for (Map<String, Object> item : items){
-//                    String title = util.Util.parseHtmlSpecialTags((String)item.get("title"));
-//                    String content= util.Util.parseContentElement((String)item.get("content"));
-//                    content = util.Util.parseHtmlSpecialTags(content);
-                    String id = (String)item.get("id");
-                    String title = (String)item.get("title");
-                    String content= (String)item.get("content");                    
-                    String created= (String)item.get("created");
-                    String imgUrl = (String)((Map)item.get("images")).get("imageLarge");
-                    
-                    ArticleDTO articleDTO = new ArticleDTO(id, title, content, imgUrl);
-                    articleDTOs.add(articleDTO);
-                }
-                
-                for(ArticleDTO articleDTO : articleDTOs){
-                    articlesMap.put(articleDTO.getId(), articleDTO);
-                    Container singleArticleBoxNews;
-                    try {
-                        singleArticleBoxNews = createNewsBoxContainer(articleDTO);
-                        NewsSectionForm.this.add(singleArticleBoxNews);                
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                NewsSectionForm.this.revalidate();
-                NewsSectionForm.this.show();
-            }
-        };
-
-        req.setPost(false);
-        req.setHttpMethod("GET");
-        req.setUrl(dataUrl);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");                       
-
-        NetworkManager.getInstance().addToQueue(req);
-    }
     
-//    private class RefreshData(){
-//        public void run(){
-//            init();
-//        }
-//    }
+    public Map<String, ArticleDTO> getArticlesMap() {
+        return articlesMap;
+    }
+
+    public void setArticlesMap(Map<String, ArticleDTO> articlesMap) {
+        this.articlesMap = articlesMap;
+    }
+
+    public Map<String, ArticleForm> getArticleFormsMap() {
+        return articleFormsMap;
+    }
+
+    public void setArticleFormsMap(Map<String, ArticleForm> articleFormsMap) {
+        this.articleFormsMap = articleFormsMap;
+    }
+
+    public List<ArticleDTO> getArticleDTOs() {
+        return articleDTOs;
+    }
+
+    public void setArticleDTOs(List<ArticleDTO> articleDTOs) {
+        this.articleDTOs = articleDTOs;
+    }
+
+    public String getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
+    }
+
+    public String getDataUrl() {
+        return dataUrl;
+    }
+
+    public void setDataUrl(String dataUrl) {
+        this.dataUrl = dataUrl;
+    }
+
+    public String getComponentType() {
+        return componentType;
+    }
+
+    public void setComponentType(String componentType) {
+        this.componentType = componentType;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getLimit() {
+        return limit;
+    }
+
+    public void setLimit(String limit) {
+        this.limit = limit;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public Form getPreviousForm() {
+        return previousForm;
+    }
+
+    public void setPreviousForm(Form previousForm) {
+        this.previousForm = previousForm;
+    }
+
      
     
 }

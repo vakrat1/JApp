@@ -10,6 +10,7 @@ import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
+import dto.MainPageModuleDTO;
 import dto.MenuDTO;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +46,9 @@ public class AppStructureParser {
     private String iPadSplash;
     private String menuType;
     
-    private List<MenuDTO> menuDTOList = new ArrayList<MenuDTO>();
-
+    private List<MenuDTO> menuDTOList = new ArrayList<MenuDTO>();    
+    
+    private MainPageModuleDTO mainPageModuleDTO;
     
     
     private void processJson() throws IOException{
@@ -68,6 +70,18 @@ public class AppStructureParser {
             MenuDTO menuDTO = new MenuDTO(menu);
             menuDTOList.add(menuDTO);
         }
+        
+        //load modules
+        Map<String, Object> modules = (Map<String, Object>)response.get("modules");
+        for (Map.Entry<String, Object> entrySet : modules.entrySet()) {
+            String key = entrySet.getKey();
+            Map<String, Object> value = (Map<String, Object>)entrySet.getValue();
+            if (key.equals("ads")){
+            }
+            else if (key.equals("mainpage")){
+                mainPageModuleDTO = new MainPageModuleDTO(value);
+            }
+        }
 //                    
 //        for (Map.Entry<String, Object> entrySet : menus.entrySet()) {
 //            String key = entrySet.getKey();
@@ -76,6 +90,7 @@ public class AppStructureParser {
 //            menuDTOList.add(menuDTO);
 //        }
     }
+    
     
     
     public static Map<String, Object>  getJsonAsMap() throws IOException{
@@ -119,6 +134,12 @@ public class AppStructureParser {
     public void setMenuDTOList(List<MenuDTO> menuDTOList) {
         this.menuDTOList = menuDTOList;
     }
-    
-    
+
+    public MainPageModuleDTO getMainPageModuleDTO() {
+        return mainPageModuleDTO;
+    }
+
+    public void setMainPageModuleDTO(MainPageModuleDTO mainPageModuleDTO) {
+        this.mainPageModuleDTO = mainPageModuleDTO;
+    }    
 }
