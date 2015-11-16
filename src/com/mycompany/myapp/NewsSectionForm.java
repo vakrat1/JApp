@@ -57,6 +57,8 @@ public class NewsSectionForm extends Form implements DataDependedForm{
     
     private List<ArticleDTO> articleDTOs = new ArrayList<>();
     
+    private String title;
+    
     private String pageId;
     
     private String dataUrl;
@@ -73,7 +75,7 @@ public class NewsSectionForm extends Form implements DataDependedForm{
     
     public NewsSectionForm(String title, String pageId, String componentType, 
             String categoryId, String limit, String page, Form previousForm){
-        this.setTitle(title);
+        this.title = title;
         this.pageId = pageId;
         this.componentType = componentType;
         this.categoryId = categoryId;
@@ -85,6 +87,8 @@ public class NewsSectionForm extends Form implements DataDependedForm{
     
     
     public void init() throws Exception{  
+        
+        this.setTitle(title);
         
         this.dataUrl = "http://ashdod10.co.il/get/" + 
                             componentType + "/items?cats=" +
@@ -108,12 +112,12 @@ public class NewsSectionForm extends Form implements DataDependedForm{
             });
             setScrollableY(true);
         }        
-        DataBuilder.downloadArticles(dataUrl, this);
+        DataBuilder.downloadArticles(dataUrl, this, title);
     }
     
     //this is a callback method that is being invoked after data is being 
     //downloaded from the server
-    public void postDataDownload(Object data){
+    public void postDataDownload(Object data, String title){
         articleDTOs = (List<ArticleDTO>)data;
         
         for(ArticleDTO articleDTO : articleDTOs){

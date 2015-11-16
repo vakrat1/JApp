@@ -16,7 +16,7 @@
           "menuitems": [
                 {
                     "id": "101",                    
-                    "name":"ראשי",   
+                    "name":"????",   
                     "component": {
                       "type": "k2",
                       "category": "8",
@@ -28,7 +28,7 @@
                 {
                     "id": "114",
                     "menutype":"mainmenu",
-                    "name":"חדשות",   
+                    "name":"?????",   
                     "component": {
                       "type": "k2",
                       "category": "2",
@@ -40,7 +40,7 @@
                 {
                     "id": "115",
                     "menutype":"mainmenu",
-                    "name":"ספורט",   
+                    "name":"?????",   
                     "component": {
                       "type": "k2",
                       "category": "3",
@@ -52,7 +52,7 @@
                 {
                     "id": "116",
                     "menutype":"mainmenu",
-                    "name":"תרבות",   
+                    "name":"?????",   
                     "component": {
                       "type": "k2",
                       "category": "5",
@@ -64,7 +64,7 @@
                 {
                     "id": "118",
                     "menutype":"mainmenu",
-                    "name":"חינוך",   
+                    "name":"?? ????",   
                     "component": {
                       "type": "k2",
                       "category": "17",
@@ -81,7 +81,7 @@
       "id": "1000",
       "type": "mod_ijoomla_adagency_remote",
       "position": "above/below/left/right/custom",
-      "name": "מודעה 600X10 מעל הכתבה",
+      "name": "????? -1�",
       "disply": "none/all/custom/customexpect",
       "custom_display_menus": [
         "2000.1",
@@ -96,7 +96,7 @@
     "mainpage": {
       "type": "k2",
       "position": "above/below/left/right/custom",
-      "name": "עמוד הבית- חדשות",
+      "name": "????? 10",
       "display": "none/all/custom/customexpect",
       "custom_display_menus": [
         "2000.1"

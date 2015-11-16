@@ -35,7 +35,7 @@ public class DataBuilder {
     
     //load form data
     public static void downloadArticles(String dataUrl, 
-            DataDependedForm form){
+            DataDependedForm form, String title){
                 
         ConnectionRequest req = new ConnectionRequest(){
             
@@ -60,7 +60,7 @@ public class DataBuilder {
                     ArticleDTO articleDTO = new ArticleDTO(id, title, content, imgUrl);
                     articleDTOs.add(articleDTO);
                 }
-                form.postDataDownload(articleDTOs);
+                form.postDataDownload(articleDTOs, title);
             }
         };
 

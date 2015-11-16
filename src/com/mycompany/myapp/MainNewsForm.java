@@ -10,10 +10,14 @@ import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.BrowserComponent;
+import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import com.codename1.ui.Container;
+import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import dto.ArticleDTO;
@@ -58,15 +62,28 @@ public class MainNewsForm extends Form implements DataDependedForm{
 //                        } 
 //                    });
         setScrollable(false);                    
-        setLayout(new BorderLayout());
+        
         
         WebBrowser webBrowser = new WebBrowser();
-        webBrowser.setURL("http://ads.ashdod10.co.il/components/com_adagency/ijoomla_ad_agency_zone.php?zid=105");
+        webBrowser.setPreferredSize(new Dimension(Display.getInstance().getDisplayWidth(),
+                        Display.getInstance().getDisplayHeight()/7));
+        //webBrowser.setURL("http://ads.ashdod10.co.il/components/com_adagency/ijoomla_ad_agency_zone.php?zid=105");
+        webBrowser.setURL("http://ads.ashdod10.co.il/images/stories/ad_agency/2/1446991534.gif");        
+        webBrowser.addPointerPressedListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                System.out.println("Action Performed");
+                Display.getInstance().execute("http://www.hakeren.co.il");
+            }
+        });
+        setLayout(new BorderLayout());
         add(BorderLayout.SOUTH, webBrowser);
+        
         
         buildCommands();
         
-        buildMainNewsForm();
+        //buildMainNewsForm();
         
         revalidate();
         show();
@@ -77,12 +94,12 @@ public class MainNewsForm extends Form implements DataDependedForm{
     
     //this is a callback method that is being invoked after data is being 
     //downloaded from the server
-    public synchronized void postDataDownload(Object data){
+    public synchronized void postDataDownload(Object data, String title){
         articleDTOs.addAll((List<ArticleDTO>)data);
         
         List<ArticleDTO> _data = (List<ArticleDTO>)data;
         
-        MainNewsForm.this.getContentPane().add(Util.getComponentSeparator());
+        MainNewsForm.this.getContentPane().add(Util.getComponentSeparator(title));
         
         for(ArticleDTO articleDTO : _data){
 //            articlesMap.put(articleDTO.getId(), articleDTO);
@@ -126,7 +143,7 @@ public class MainNewsForm extends Form implements DataDependedForm{
                     newsSectionForm.getCategoryId() + 
                     "&limit=" + customModuleParams.getLimit();
             
-            DataBuilder.downloadArticles(dataUrl, this);
+            DataBuilder.downloadArticles(dataUrl, this, newsSectionForm.getTitle());
             
 //            NewsSectionForm newsSectionFormHeadlines = new NewsSectionForm(
 //                    newsSectionForm.getTitle(), 
@@ -200,11 +217,7 @@ public class MainNewsForm extends Form implements DataDependedForm{
                     menuItemDTO.getLimit(), "1",
                     MainNewsForm.this);
             newsSectionFormsMap.put(pageId, newsSectionForm);
-            try {
-                newsSectionForm.init();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            
             
             Command cmd = new Command(menuItemDTO.getMenuItemName()){
                 public void actionPerformed(ActionEvent evt) {                    
@@ -217,8 +230,13 @@ public class MainNewsForm extends Form implements DataDependedForm{
                                 + "command with PageID: " + pageId);
                         return;
                     }
-                    newsSectionForm.revalidate();
-                    newsSectionForm.show();
+                    try {
+                        newsSectionForm.init();
+                        newsSectionForm.revalidate();
+                        newsSectionForm.show();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             };
             addCommand(cmd);

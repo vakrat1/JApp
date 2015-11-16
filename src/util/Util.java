@@ -26,8 +26,8 @@ import java.io.InputStream;
  */
 public class Util {
     
-    public static Component getComponentSeparator(){
-        Label sep = new Label("");
+    public static Component getComponentSeparator(String title){
+        Label sep = new Label(title);
         sep.setUIID("sectionSeperationTitle");
         return sep;        
     }

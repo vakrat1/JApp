@@ -11,5 +11,5 @@ package com.mycompany.myapp;
  */
 public interface DataDependedForm {
     
-    public void postDataDownload(Object data);   
+    public void postDataDownload(Object data, String title);   
 }
