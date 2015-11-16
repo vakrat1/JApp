@@ -41,7 +41,7 @@ public class MainPageModuleDTO {
             Map<String, Object> next = iterator.next();
             CustomModuleParams customModuleParams = new CustomModuleParams(next);
             customModuleParamList.add(customModuleParams);
-        }        
+        }
     }
 
     public String getType() {
@@ -95,71 +95,30 @@ public class MainPageModuleDTO {
         
     
     public static class CustomModuleParams{
-        private String category;
+        private String categoryUrl;
         
-        private String featured;
-        
-        private String limit;
-        
-        private String page;
+        private String name;
         
         public CustomModuleParams(Map<String, Object> mainPageModuleParams){
-            this.category = (String)mainPageModuleParams.get("category");
-            this.featured = (String)mainPageModuleParams.get("featured");
-            this.limit = (String)mainPageModuleParams.get("limit");
-            this.page = (String)mainPageModuleParams.get("page");
+            this.categoryUrl = (String)mainPageModuleParams.get("category_url");
+            this.name = (String)mainPageModuleParams.get("name");
         }
 
-        public String getCategory() {
-            return category;
+        public String getCategoryUrl() {
+            return categoryUrl;
         }
 
-        public void setCategory(String category) {
-            this.category = category;
+        public void setCategoryUrl(String categoryUrl) {
+            this.categoryUrl = categoryUrl;
         }
 
-        public String getFeatured() {
-            return featured;
+        public String getName() {
+            return name;
         }
 
-        public void setFeatured(String featured) {
-            this.featured = featured;
+        public void setName(String name) {
+            this.name = name;
         }
-
-        public String getLimit() {
-            return limit;
-        }
-
-        public void setLimit(String limit) {
-            this.limit = limit;
-        }
-
-        public String getPage() {
-            return page;
-        }
-
-        public void setPage(String page) {
-            this.page = page;
-        }
-        
-        
     }
-    
-    
-    
-    
-    //"type": "k2",
-//      "position": "above/below/left/right/custom",
-//      "name": "עמוד הבית- חדשות",
-//      "disply": "none/all/custom/customexpect",
-//      "custom display menus": [
-//        "2000.1"
-//      ],
-//      "custom params": {
-//        "category": "114",
-//        "featured": "yes/no/include",
-//        "limit": "3",
-//        "page": "1"
-//      },
-    
+
 }

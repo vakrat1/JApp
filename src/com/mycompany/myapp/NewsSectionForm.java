@@ -42,6 +42,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import rest.RestConsumer;
+import util.ArticleAction;
 import util.DataBuilder;
 import util.Util;
 
@@ -111,9 +112,11 @@ public class NewsSectionForm extends Form implements DataDependedForm{
                 } 
             });
             setScrollableY(true);
-        }        
+        }
         DataBuilder.downloadArticles(dataUrl, this, title);
     }
+    
+    
     
     //this is a callback method that is being invoked after data is being 
     //downloaded from the server
@@ -123,7 +126,8 @@ public class NewsSectionForm extends Form implements DataDependedForm{
         for(ArticleDTO articleDTO : articleDTOs){
             articlesMap.put(articleDTO.getId(), articleDTO);
             Container singleArticleBoxNews;
-            NewsSectionForm.ArticleAction articleAction = new NewsSectionForm.ArticleAction(articleDTO.getId());
+//            ArticleAction articleAction = new ArticleAction(articleDTO.getId());
+            ArticleAction articleAction = new ArticleAction(articleDTO, this);
             try {
                 singleArticleBoxNews = DataBuilder.createNewsBoxContainer(articleDTO, articleAction);
                 NewsSectionForm.this.add(singleArticleBoxNews);                
@@ -135,37 +139,6 @@ public class NewsSectionForm extends Form implements DataDependedForm{
         NewsSectionForm.this.show();
     }
     
-    
-    
-    
-    
-    class ArticleAction implements ActionListener{
-        
-        private String id;
-        
-        public ArticleAction(String id){
-            this.id = id;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-            ArticleDTO articleDTO = articlesMap.get(id);
-            try {
-                ArticleForm articleForm = articleFormsMap.get(id);
-                if (articleForm == null){
-                    articleForm = new ArticleForm(NewsSectionForm.this);
-                    articleForm.init();
-                    articleForm.createArticleBox(articleDTO);
-                }
-                articleForm.revalidate();
-                articleForm.show();;
-            } catch (Exception ex) {
-                System.out.println("ERROR: " + RestConsumer.class.getName());
-                ex.printStackTrace();
-
-            }
-        }
-    }
     
     
     public Map<String, ArticleDTO> getArticlesMap() {

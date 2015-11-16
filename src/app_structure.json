@@ -13,22 +13,11 @@
           "id": "1",
           "menutype": "mainmenu",
           "title": "Main Menu",
-          "menuitems": [
-                {
-                    "id": "101",                    
-                    "name":"????",   
-                    "component": {
-                      "type": "k2",
-                      "category": "8",
-                      "featured": "yes/no/include",
-                      "limit": "10",
-                      "page": "1"
-                    }
-                },
+          "menuitems": [                
                 {
                     "id": "114",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"חדשות",
                     "component": {
                       "type": "k2",
                       "category": "2",
@@ -40,7 +29,7 @@
                 {
                     "id": "115",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"ספורט",   
                     "component": {
                       "type": "k2",
                       "category": "3",
@@ -52,7 +41,7 @@
                 {
                     "id": "116",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"תרבות",   
                     "component": {
                       "type": "k2",
                       "category": "5",
@@ -64,7 +53,7 @@
                 {
                     "id": "118",
                     "menutype":"mainmenu",
-                    "name":"?? ????",   
+                    "name":"חינוך",   
                     "component": {
                       "type": "k2",
                       "category": "17",
@@ -81,12 +70,10 @@
       "id": "1000",
       "type": "mod_ijoomla_adagency_remote",
       "position": "above/below/left/right/custom",
-      "name": "????? -1�",
+      "name": "אשדוד10 - פרסומות",
       "disply": "none/all/custom/customexpect",
       "custom_display_menus": [
-        "2000.1",
-        "2000.2",
-        "2000.5"
+        "114","115","116","118"
       ],
       "custom params": {
         "website url": "http://ads.ashdod10.co.il/",
@@ -96,35 +83,31 @@
     "mainpage": {
       "type": "k2",
       "position": "above/below/left/right/custom",
-      "name": "????? 10",
+      "name": "ראשי - אשדוד 10",
       "display": "none/all/custom/customexpect",
       "custom_display_menus": [
         "2000.1"
       ],
       "custom_params": [
           {
-            "category": "114",
-            "featured": "yes/no/include",
-            "limit": "3",
-            "page": "1"
+            "category_url": "http://ashdod10.co.il/get/k2/items?featured=2&limit=5",
+            "name": ""
           },
           {
-            "category": "115",
-            "featured": "yes/no/include",
-            "limit": "3",
-            "page": "1"
+              "category_url": "http://ashdod10.co.il/get/k2/items?cats=2&featured=0&limit=4",
+              "name": "חדשות"
           },
           {
-            "category": "116",
-            "featured": "yes/no/include",
-            "limit": "3",
-            "page": "1"
+              "category_url": "http://ashdod10.co.il/get/k2/items?cats=3&featured=0&limit=4",
+              "name": "ספורט"
           },
           {
-            "category": "118",
-            "featured": "yes/no/include",
-            "limit": "3",
-            "page": "1"
+              "category_url": "http://ashdod10.co.il/get/k2/items?cats=5&featured=0&limit=4",
+              "name": "תרבות"            
+          },
+          {
+              "category_url": "http://ashdod10.co.il/get/k2/items?cats=17&featured=0&limit=4",
+              "name": "חינוך" 
           }
       ]
     }

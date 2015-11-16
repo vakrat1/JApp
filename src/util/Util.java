@@ -28,7 +28,7 @@ public class Util {
     
     public static Component getComponentSeparator(String title){
         Label sep = new Label(title);
-        sep.setUIID("sectionSeperationTitle");
+        sep.setUIID("sectionSeperatorTitle");
         return sep;        
     }
     

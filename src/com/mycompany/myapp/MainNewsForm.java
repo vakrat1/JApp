@@ -34,6 +34,7 @@ import java.util.Map;
 import javafx.scene.web.WebView;
 import parser.AppStructureParser;
 import rest.RestConsumer;
+import util.ArticleAction;
 import util.DataBuilder;
 import util.Util;
 
@@ -49,8 +50,12 @@ public class MainNewsForm extends Form implements DataDependedForm{
     
     List<MenuDTO> menuDTOs = new ArrayList<>();
     
+    Container centerContainer;
+    
+    ArticleAction articleAction;
+    
     public MainNewsForm() throws IOException{
-        menuDTOs = AppStructureParser.getInstance().getMenuDTOList();
+        menuDTOs = AppStructureParser.getInstance().getMenuDTOList();        
     }
     
     public void init() throws IOException{
@@ -80,10 +85,14 @@ public class MainNewsForm extends Form implements DataDependedForm{
         setLayout(new BorderLayout());
         add(BorderLayout.SOUTH, webBrowser);
         
+        centerContainer = new Container();
+        centerContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+        centerContainer.setScrollableY(true);
+        add(BorderLayout.CENTER, centerContainer);
         
         buildCommands();
         
-        //buildMainNewsForm();
+        buildMainNewsForm();
         
         revalidate();
         show();
@@ -92,35 +101,50 @@ public class MainNewsForm extends Form implements DataDependedForm{
 //        loadAppMenu();            
     }
     
+    Map<String, ArticleDTO> articlesMap = new HashMap<>();
+    
     //this is a callback method that is being invoked after data is being 
     //downloaded from the server
     public synchronized void postDataDownload(Object data, String title){
+        
         articleDTOs.addAll((List<ArticleDTO>)data);
         
+//        for(ArticleDTO articleDTO : (List<ArticleDTO>)data){
+//            articlesMap.put(articleDTO.getId(), articleDTO);
+//        }
+                
         List<ArticleDTO> _data = (List<ArticleDTO>)data;
         
-        MainNewsForm.this.getContentPane().add(Util.getComponentSeparator(title));
+        centerContainer.add(Util.getComponentSeparator(title));
         
         for(ArticleDTO articleDTO : _data){
-//            articlesMap.put(articleDTO.getId(), articleDTO);
-            Container singleArticleBoxNews;
             try {
-                singleArticleBoxNews = DataBuilder.createNewsBoxContainer(articleDTO, null);//TODO
-                MainNewsForm.this.getContentPane().add(singleArticleBoxNews);                
+                ArticleAction articleAction = new ArticleAction(
+                        articleDTO, this);
+                Container singleArticleBoxNews = 
+                        DataBuilder.createNewsBoxContainer(articleDTO, articleAction);
+                centerContainer.add(singleArticleBoxNews);                
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        MainNewsForm.this.revalidate();
-        MainNewsForm.this.show();
+        
+//        add(BorderLayout.CENTER, centerContainer);        
+//        BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
+//        mainContainer.setLayout(boxLayout);
+//        
+//        mainContainer.setScrollableY(true);
+        centerContainer.revalidate();        
+        revalidate();
+        show();
     }
     
     public void buildMainNewsForm() throws IOException{
-        Container mainContainer = getContentPane();
-        BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
-        mainContainer.setLayout(boxLayout);
-        
-        mainContainer.setScrollableY(true);
+//        Container mainContainer = getContentPane();
+//        BoxLayout boxLayout = new BoxLayout(BoxLayout.Y_AXIS);
+//        mainContainer.setLayout(boxLayout);
+//        
+//        mainContainer.setScrollableY(true);
         
         MainPageModuleDTO mainPageModuleDTO = 
                 AppStructureParser.getInstance().getMainPageModuleDTO();
@@ -130,20 +154,24 @@ public class MainNewsForm extends Form implements DataDependedForm{
         
         for (MainPageModuleDTO.CustomModuleParams customModuleParams : customModuleParamsList){
             
-            String pageId = customModuleParams.getCategory();
-            NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
-                                    
-            if (newsSectionForm == null){
-                System.out.println("Failed to find NewsSection with pageId: " + pageId);
-                continue;
-            }
+            String dataUrl = customModuleParams.getCategoryUrl();
+            String title = customModuleParams.getName();
             
-            String dataUrl = "http://ashdod10.co.il/get/" + 
-                    newsSectionForm.getComponentType() + "/items?cats=" +
-                    newsSectionForm.getCategoryId() + 
-                    "&limit=" + customModuleParams.getLimit();
+            DataBuilder.downloadArticles(dataUrl, this, title);
             
-            DataBuilder.downloadArticles(dataUrl, this, newsSectionForm.getTitle());
+//            NewsSectionForm newsSectionForm = newsSectionFormsMap.get(pageId);
+//                                    
+//            if (newsSectionForm == null){
+//                System.out.println("Failed to find NewsSection with pageId: " + pageId);
+//                continue;
+//            }
+//            
+//            String dataUrl = "http://ashdod10.co.il/get/" + 
+//                    newsSectionForm.getComponentType() + "/items?cats=" +
+//                    newsSectionForm.getCategoryId() + 
+//                    "&limit=" + customModuleParams.getLimit();
+            
+            
             
 //            NewsSectionForm newsSectionFormHeadlines = new NewsSectionForm(
 //                    newsSectionForm.getTitle(), 
