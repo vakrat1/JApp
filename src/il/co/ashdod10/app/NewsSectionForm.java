@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.myapp;
+package il.co.ashdod10.app;
 
 import com.codename1.components.SpanLabel;
 import com.codename1.components.xmlview.DefaultXMLViewKit;
@@ -32,7 +32,7 @@ import com.codename1.ui.plaf.Style;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.util.Callback;
 import com.codename1.xml.Element;
-import dto.ArticleDTO;
+import il.co.ashdod10.dto.ArticleDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,10 +41,10 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import rest.RestConsumer;
-import util.ArticleAction;
-import util.DataBuilder;
-import util.Util;
+import il.co.ashdod10.rest.RestConsumer;
+import il.co.ashdod10.util.ArticleAction;
+import il.co.ashdod10.util.DataBuilder;
+import il.co.ashdod10.util.Util;
 
 /**
  *
@@ -95,7 +95,7 @@ public class NewsSectionForm extends Form implements DataDependedForm{
                             componentType + "/items?cats=" +
                              categoryId + "&limit="+ limit;
         
-        util.Util.setFormTitle(this);
+        il.co.ashdod10.util.Util.setFormTitle(this);
         
         Container sectionBox = getContentPane();
         

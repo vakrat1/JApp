@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.myapp;
+package il.co.ashdod10.app;
 
 import com.codename1.components.xmlview.DefaultXMLViewKit;
 import com.codename1.components.xmlview.XMLView;
@@ -16,9 +16,9 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.util.Callback;
 import com.codename1.xml.Element;
-import dto.ArticleDTO;
+import il.co.ashdod10.dto.ArticleDTO;
 import java.io.IOException;
-import util.Util;
+import il.co.ashdod10.util.Util;
 
 /**
  *
@@ -37,7 +37,7 @@ public class ArticleForm extends Form{
     
     public void init() throws IOException{        
         contentPane.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
-        util.Util.setFormTitle(this);
+        il.co.ashdod10.util.Util.setFormTitle(this);
         setUIID("newsBox");
         setScrollableY(true);
         setBackCommand(new Command("Back") {
@@ -57,7 +57,7 @@ public class ArticleForm extends Form{
 
         TextArea titleTA = new TextArea();
         titleTA.setUIID("titleLabel");
-        String title = util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
+        String title = il.co.ashdod10.util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
         titleTA.setText(title);
         titleTA.setEditable(false);      
 
@@ -70,7 +70,7 @@ public class ArticleForm extends Form{
 
         String content = articleDTO.getContent();
         content = Util.parseContentElement(content);
-        content = util.Util.parseHtmlSpecialTags(content);
+        content = il.co.ashdod10.util.Util.parseHtmlSpecialTags(content);
 
 
         contentViewer.loadXmlAsString(content, new Callback<Element>() {
@@ -84,7 +84,7 @@ public class ArticleForm extends Form{
         });
 
         Container x = new Container(new BoxLayout(BoxLayout.X_AXIS));
-        contentPane.add(util.Util.getImageContainer(null, articleDTO, 1, 2));
+        contentPane.add(il.co.ashdod10.util.Util.getImageContainer(null, articleDTO, 1, 2));
         contentPane.add(titleTA);
         contentPane.add(contentViewer);
         contentPane.revalidate();

@@ -1,8 +1,11 @@
-package com.mycompany.myapp;
+package il.co.ashdod10.app;
 
 
+import com.codename1.push.Push;
+import com.codename1.push.PushCallback;
 import com.codename1.ui.Command;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -13,10 +16,12 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
 import java.util.Hashtable;
-import parser.AppStructureParser;
-import rest.RestConsumer;
+import il.co.ashdod10.parser.AppStructureParser;
+import il.co.ashdod10.rest.RestConsumer;
 
-public class MyApplication {
+public class MyApplication implements PushCallback{
+    
+    private String GOOGLE_MESSAGING_API_KEY = "876789427701";//12 digits taken from Google messaging
 
     private Form current;
     private Resources theme;
@@ -73,6 +78,22 @@ public class MyApplication {
                 
             }
         };
+    }
+    
+    public void push(String value) {
+        Dialog.show("DeviceId", "Push msg is: " + value, "OK", "Cancel");
+        //called when user select the push message in the device
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void registeredForPush(String deviceId) {
+        String pushKey = Push.getPushKey();        
+    }
+    
+    
+    public void pushRegistrationError(String error, int errorCode) {
+        Dialog.show("ERROR", "registeredForPush():: Device Id is: " + error,
+                "OK", "Cancel");
     }
 
 }

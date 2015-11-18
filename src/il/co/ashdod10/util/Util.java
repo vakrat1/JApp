@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package il.co.ashdod10.util;
 
 import com.codename1.io.services.ImageDownloadService;
 import com.codename1.ui.Component;
@@ -16,7 +16,7 @@ import com.codename1.ui.Label;
 import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.util.StringUtil;
-import dto.ArticleDTO;
+import il.co.ashdod10.dto.ArticleDTO;
 import java.io.IOException;
 import java.io.InputStream;
 

@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package il.co.ashdod10.util;
 
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
-import com.mycompany.myapp.ArticleForm;
-import com.mycompany.myapp.NewsSectionForm;
-import dto.ArticleDTO;
+import il.co.ashdod10.app.ArticleForm;
+import il.co.ashdod10.app.NewsSectionForm;
+import il.co.ashdod10.dto.ArticleDTO;
 import java.util.Map;
-import rest.RestConsumer;
+import il.co.ashdod10.rest.RestConsumer;
 
 /**
  *

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.myapp;
+package il.co.ashdod10.app;
 
 import com.codename1.components.WebBrowser;
 import com.codename1.io.ConnectionRequest;
@@ -20,10 +20,10 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
-import dto.ArticleDTO;
-import dto.MainPageModuleDTO;
-import dto.MenuDTO;
-import dto.MenuItemDTO;
+import il.co.ashdod10.dto.ArticleDTO;
+import il.co.ashdod10.dto.MainPageModuleDTO;
+import il.co.ashdod10.dto.MenuDTO;
+import il.co.ashdod10.dto.MenuItemDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,11 +32,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.web.WebView;
-import parser.AppStructureParser;
-import rest.RestConsumer;
-import util.ArticleAction;
-import util.DataBuilder;
-import util.Util;
+import il.co.ashdod10.parser.AppStructureParser;
+import il.co.ashdod10.rest.RestConsumer;
+import il.co.ashdod10.util.ArticleAction;
+import il.co.ashdod10.util.DataBuilder;
+import il.co.ashdod10.util.Util;
 
 /**
  *
@@ -60,7 +60,7 @@ public class MainNewsForm extends Form implements DataDependedForm{
     
     public void init() throws IOException{
         
-        util.Util.setFormTitle(this);
+        il.co.ashdod10.util.Util.setFormTitle(this);
 //        setBackCommand(new Command("Back") {
 //                        public void actionPerformed(ActionEvent ev) {
 //                            mainNewsForm.showBack();

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package il.co.ashdod10.util;
 
 import com.codename1.components.xmlview.DefaultXMLViewKit;
 import com.codename1.components.xmlview.XMLView;
@@ -17,9 +17,9 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.util.Callback;
 import com.codename1.xml.Element;
-import com.mycompany.myapp.DataDependedForm;
-import com.mycompany.myapp.NewsSectionForm;
-import dto.ArticleDTO;
+import il.co.ashdod10.app.DataDependedForm;
+import il.co.ashdod10.app.NewsSectionForm;
+import il.co.ashdod10.dto.ArticleDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -82,7 +82,7 @@ public class DataBuilder {
         
         TextArea titleTA = new TextArea();
         titleTA.setUIID("titleLabel");
-        String title = util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
+        String title = il.co.ashdod10.util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
         titleTA.setText(title);
         titleTA.setEditable(false);
         titleTA.addPointerReleasedListener(actionListener);        
@@ -97,7 +97,7 @@ public class DataBuilder {
         //process only the first raw of the content of the Article
         String content = articleDTO.getContent();
         content = content.substring(0, content.indexOf("<p>"));
-        content = util.Util.parseHtmlSpecialTags(content);
+        content = il.co.ashdod10.util.Util.parseHtmlSpecialTags(content);
         content = Util.addHeader() + "<p>" + content + "</p>" + Util.addFooter();        
                 
         contentViewer.loadXmlAsString(content, new Callback<Element>() {
@@ -111,7 +111,7 @@ public class DataBuilder {
         });
                 
         Container x = new Container(new BoxLayout(BoxLayout.X_AXIS));
-        x.add(util.Util.getImageContainer(actionListener, articleDTO, 2, 4));
+        x.add(il.co.ashdod10.util.Util.getImageContainer(actionListener, articleDTO, 2, 4));
         x.add(titleTA);
         newsBox.add(x);
         newsBox.add(contentViewer);

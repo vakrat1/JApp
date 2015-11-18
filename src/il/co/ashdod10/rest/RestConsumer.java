@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rest;
+package il.co.ashdod10.rest;
 
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
@@ -12,10 +12,10 @@ import com.codename1.ui.Command;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
-import com.mycompany.myapp.MainNewsForm;
-import com.mycompany.myapp.NewsSectionForm;
-import dto.ArticleDTO;
-import dto.MenuItemDTO;
+import il.co.ashdod10.app.MainNewsForm;
+import il.co.ashdod10.app.NewsSectionForm;
+import il.co.ashdod10.dto.ArticleDTO;
+import il.co.ashdod10.dto.MenuItemDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

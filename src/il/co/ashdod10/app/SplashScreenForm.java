@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.myapp;
+package il.co.ashdod10.app;
 
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
@@ -50,7 +50,7 @@ public class SplashScreenForm {
 //        splash.addComponent(BorderLayout.NORTH, title);
 //        splash.addComponent(BorderLayout.SOUTH, subtitle);
 
-        Label splashLabel = new Label(util.Util.getImage("/splash-screen_1080X1920.png"));
+        Label splashLabel = new Label(il.co.ashdod10.util.Util.getImage("/splash-screen_1080X1920.png"));
         splashLabel.setUIID("splashLabel");
 
         // a layered layout places components one on top of the other in the same dimension, it is

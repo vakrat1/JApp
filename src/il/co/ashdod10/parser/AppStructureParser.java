@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package parser;
+package il.co.ashdod10.parser;
 
 import com.codename1.io.JSONParser;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
-import dto.MainPageModuleDTO;
-import dto.MenuDTO;
+import il.co.ashdod10.dto.MainPageModuleDTO;
+import il.co.ashdod10.dto.MenuDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
