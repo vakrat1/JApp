@@ -17,7 +17,7 @@
                 {
                     "id": "114",
                     "menutype":"mainmenu",
-                    "name":"?????",
+                    "name":"חדשות",
                     "component": {
                       "type": "k2",
                       "category": "2",
@@ -29,7 +29,7 @@
                 {
                     "id": "115",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"ספורט",   
                     "component": {
                       "type": "k2",
                       "category": "3",
@@ -41,7 +41,7 @@
                 {
                     "id": "116",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"תרבות",   
                     "component": {
                       "type": "k2",
                       "category": "5",
@@ -53,7 +53,7 @@
                 {
                     "id": "118",
                     "menutype":"mainmenu",
-                    "name":"?????",   
+                    "name":"חינוך",   
                     "component": {
                       "type": "k2",
                       "category": "17",
@@ -70,7 +70,7 @@
       "id": "1000",
       "type": "mod_ijoomla_adagency_remote",
       "position": "above/below/left/right/custom",
-      "name": "�?שדוד10 - פרסומות",
+      "name": "�?שדוד10 - פרסומות",
       "disply": "none/all/custom/customexpect",
       "custom_display_menus": [
         "114","115","116","118"
@@ -83,7 +83,7 @@
     "mainpage": {
       "type": "k2",
       "position": "above/below/left/right/custom",
-      "name": "???? - ?????10",
+      "name": "אשדוד10 - ראשי",
       "display": "none/all/custom/customexpect",
       "custom_display_menus": [
         "2000.1"
@@ -95,19 +95,19 @@
           },
           {
               "category_url": "http://ashdod10.co.il/get/k2/items?cats=2&featured=0&limit=4",
-              "name": "?????"
+              "name": "חדשות"
           },
           {
               "category_url": "http://ashdod10.co.il/get/k2/items?cats=3&featured=0&limit=4",
-              "name": "?????"
+              "name": "ספורט"
           },
           {
               "category_url": "http://ashdod10.co.il/get/k2/items?cats=5&featured=0&limit=4",
-              "name": "?????"            
+              "name": "תרבות"            
           },
           {
               "category_url": "http://ashdod10.co.il/get/k2/items?cats=17&featured=0&limit=4",
-              "name": "?????" 
+              "name": "חינוך" 
           }
       ]
     }

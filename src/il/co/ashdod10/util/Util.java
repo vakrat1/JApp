@@ -72,7 +72,8 @@ public class Util {
 //        String imageName = imageUrl.substring(imageUrl.indexOf("_")+1);
         String imageName = imageUrl.substring(imageUrl.lastIndexOf("/")+1);
         Image img = EncodedImage.create(in);
-        img = img.scaledWidth(Display.getInstance().getDisplayWidth());
+        img = img.scaledWidth(Display.getInstance().getDisplayWidth()/widthRatio);
+        img = img.scaledHeight(Display.getInstance().getDisplayHeight()/heightRatio);
 //        URLImage image = URLImage.createToStorage(img, 
 //                imageName, imageUrl, URLImage.RESIZE_SCALE_TO_FILL);        
         

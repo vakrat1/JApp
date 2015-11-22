@@ -5,20 +5,24 @@
  */
 package il.co.ashdod10.util;
 
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.xmlview.DefaultXMLViewKit;
 import com.codename1.components.xmlview.XMLView;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
+import com.codename1.ui.Label;
 import com.codename1.ui.TextArea;
+import com.codename1.ui.animations.CommonTransitions;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.plaf.UIManager;
 import com.codename1.util.Callback;
 import com.codename1.xml.Element;
 import il.co.ashdod10.app.DataDependedForm;
-import il.co.ashdod10.app.NewsSectionForm;
 import il.co.ashdod10.dto.ArticleDTO;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,13 +67,33 @@ public class DataBuilder {
                 form.postDataDownload(articleDTOs, title);
             }
         };
+        
 
         req.setPost(false);
         req.setHttpMethod("GET");
-        req.setUrl(dataUrl);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");                       
-
-        NetworkManager.getInstance().addToQueue(req);
+        req.setUrl(dataUrl);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");   
+       
+        showProgressBarDialog(req);
+        
+        NetworkManager.getInstance().addToQueueAndWait(req);        
     }
+    
+    private static void showProgressBarDialog(ConnectionRequest req){
+         Dialog d = new Dialog();
+        d.setDialogUIID("Container");
+        d.setLayout(new BorderLayout());
+        Container cnt = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+        cnt.addComponent(new Label("Loading..."));
+        InfiniteProgress ip = new InfiniteProgress();
+        cnt.addComponent(ip);
+        d.addComponent(BorderLayout.CENTER, cnt);
+        d.setTransitionInAnimator(CommonTransitions.createEmpty());
+        d.setTransitionOutAnimator(CommonTransitions.createEmpty());
+        d.showPacked(BorderLayout.CENTER, false);
+ 
+        req.setDisposeOnCompletion(d);
+    }
+    
     
     
     public static Container createNewsBoxContainer(ArticleDTO articleDTO,
