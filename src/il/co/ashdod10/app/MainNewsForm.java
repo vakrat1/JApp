@@ -17,6 +17,7 @@ import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.events.BrowserNavigationCallback;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
@@ -34,6 +35,7 @@ import java.util.Map;
 import javafx.scene.web.WebView;
 import il.co.ashdod10.parser.AppStructureParser;
 import il.co.ashdod10.rest.RestConsumer;
+import il.co.ashdod10.util.AdModule;
 import il.co.ashdod10.util.ArticleAction;
 import il.co.ashdod10.util.DataBuilder;
 import il.co.ashdod10.util.Util;
@@ -68,22 +70,10 @@ public class MainNewsForm extends Form implements DataDependedForm{
 //                    });
         setScrollable(false);                    
         
+        WebBrowser adModule = AdModule.getAdModule();
         
-        WebBrowser webBrowser = new WebBrowser();
-        webBrowser.setPreferredSize(new Dimension(Display.getInstance().getDisplayWidth(),
-                        Display.getInstance().getDisplayHeight()/7));
-        //webBrowser.setURL("http://ads.ashdod10.co.il/components/com_adagency/ijoomla_ad_agency_zone.php?zid=105");
-        webBrowser.setURL("http://ads.ashdod10.co.il/images/stories/ad_agency/2/1446991534.gif");        
-        webBrowser.addPointerPressedListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                System.out.println("Action Performed");
-                Display.getInstance().execute("http://www.hakeren.co.il");
-            }
-        });
         setLayout(new BorderLayout());
-        add(BorderLayout.SOUTH, webBrowser);
+        add(BorderLayout.SOUTH, adModule);
         
         centerContainer = new Container();
         centerContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));

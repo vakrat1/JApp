@@ -73,7 +73,7 @@ public class DataBuilder {
         req.setHttpMethod("GET");
         req.setUrl(dataUrl);//"http://ashdod10.co.il/get/k2/items?cats=3&limit=10");   
        
-        showProgressBarDialog(req);
+//        showProgressBarDialog(req);
         
         NetworkManager.getInstance().addToQueueAndWait(req);        
     }

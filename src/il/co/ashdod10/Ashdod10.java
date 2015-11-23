@@ -63,6 +63,18 @@ public class Ashdod10 implements PushCallback{
                 return;
             }
             
+        Display.getInstance().scheduleBackgroundTask(new Runnable() {
+            public void run() {
+                try {
+                    Hashtable meta = new Hashtable();
+                    meta.put(com.codename1.push.Push.GOOGLE_PUSH_KEY, GOOGLE_MESSAGING_API_KEY);
+                    Display.getInstance().registerPush(meta, false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+            
             AppStructureParser.getInstance();
                                    
             SplashScreenForm.showSplashScreen();
