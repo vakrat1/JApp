@@ -39,7 +39,8 @@ public class Util {
 ////        _content.re
 ////                "&nbsp;", "\n");
         _content = StringUtil.replaceAll(_content, "&nbsp;", " ");
-        _content = StringUtil.replaceAll(_content, "&quot;", "\"");        
+        _content = StringUtil.replaceAll(_content, "&quot;", "\"");
+        _content = StringUtil.replaceAll(_content, "&#039;", "'");
         
         return _content;
     }

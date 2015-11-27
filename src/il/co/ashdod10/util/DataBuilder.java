@@ -13,6 +13,7 @@ import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
+import com.codename1.ui.Display;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.animations.CommonTransitions;
@@ -108,37 +109,40 @@ public class DataBuilder {
         titleTA.setUIID("titleLabel");
         String title = il.co.ashdod10.util.Util.parseHtmlSpecialTags(articleDTO.getTitle());
         titleTA.setText(title);
-        titleTA.setEditable(false);
-        titleTA.addPointerReleasedListener(actionListener);        
+        titleTA.setEditable(false);        
+        titleTA.addPointerReleasedListener(actionListener);
+        //titleTA.setHeight(Display.getInstance().getDisplayHeight() / 4);
         
         
-        DefaultXMLViewKit kit = new DefaultXMLViewKit();
-        
-        XMLView contentViewer = new XMLView(UIManager.initFirstTheme("/theme"));
-        kit.install(contentViewer);
+//        DefaultXMLViewKit kit = new DefaultXMLViewKit();
+//        
+//        XMLView contentViewer = new XMLView(UIManager.initFirstTheme("/theme"));
+//        kit.install(contentViewer);
 //        content.load("http://dev.weblite.ca/demo-xmlview.xml", new Callback<Element>() {
         
         //process only the first raw of the content of the Article
-        String content = articleDTO.getContent();
-        content = content.substring(0, content.indexOf("<p>"));
-        content = il.co.ashdod10.util.Util.parseHtmlSpecialTags(content);
-        content = Util.addHeader() + "<p>" + content + "</p>" + Util.addFooter();        
-                
-        contentViewer.loadXmlAsString(content, new Callback<Element>() {
-
-            public void onSucess(Element value) {
-                newsBox.revalidate();
-            }
-
-            public void onError(Object sender, Throwable err, int errorCode, String errorMessage) {                
-            }            
-        });
+//        String content = articleDTO.getContent();
+//        content = content.substring(0, content.indexOf("<p>"));
+//        content = il.co.ashdod10.util.Util.parseHtmlSpecialTags(content);
+//        content = Util.addHeader() + "<p>" + content + "</p>" + Util.addFooter();        
+//                
+//        contentViewer.loadXmlAsString(content, new Callback<Element>() {
+//
+//            public void onSucess(Element value) {
+//                newsBox.revalidate();
+//            }
+//
+//            public void onError(Object sender, Throwable err, int errorCode, String errorMessage) {                
+//            }            
+//        });
                 
         Container x = new Container(new BoxLayout(BoxLayout.X_AXIS));
         x.add(il.co.ashdod10.util.Util.getImageContainer(actionListener, articleDTO, 2, 4));
         x.add(titleTA);
-        newsBox.add(x);
-        newsBox.add(contentViewer);
+        x.setPreferredH(Display.getInstance().getDisplayHeight() / 4);
+        x.setPreferredW(Display.getInstance().getDisplayWidth());
+        newsBox.add(x);        
+//        newsBox.add(contentViewer);
         newsBox.revalidate();
         
         return newsBox;
